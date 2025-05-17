@@ -5,6 +5,6 @@
 #include  <cstdlib>
 #include  "bst.h"
 
-BST<std::string> makeTree(const char* filename) {
+void makeTree(BST<std::string>& tree, const char* filename) {
   // поместите сюда свой код
 }
