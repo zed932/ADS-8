@@ -3,14 +3,15 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <string>
+#include <cctype>
+#include <sys/stat.h>
 #include "bst.h"
 
-void processCharacter(char ch, std::string& current_word, BST<std::string>& tree) {
-  if (ch >= 'A' && ch <= 'Z') {
-    ch = static_cast<char>(ch + ('a' - 'A'));
-  }
-  
-  if (ch >= 'a' && ch <= 'z') {
+void processCharacter(char ch, std::string& current_word,
+                      BST<std::string>& tree) {
+  ch = tolower(ch);
+  if (isalpha(static_cast<unsigned char>(ch))) {
     current_word += ch;
   } else if (!current_word.empty()) {
     tree.add(current_word);
@@ -19,9 +20,9 @@ void processCharacter(char ch, std::string& current_word, BST<std::string>& tree
 }
 
 void makeTree(BST<std::string>& tree, const char* filename) {
-  std::ifstream input_file(filename);
+  std::ifstream input_file(filename, std::ios::binary);
   if (!input_file) {
-    std::cerr << "Error opening input file!" << std::endl;
+    std::cerr << "File error!" << std::endl;
     return;
   }
 
@@ -36,18 +37,18 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   }
 
   input_file.close();
-  std::cout << "Tree depth: " << tree.depth() << std::endl;
 }
 
 void printFreq(BST<std::string>& tree) {
   auto frequencies = tree.getFrequencies();
-  
-  std::sort(frequencies.begin(), frequencies.end(),
-      [](const auto& a, const auto& b) {
-        return a.second > b.second ||
-              (a.second == b.second && a.first < b.first);
-      });
 
+  std::sort(frequencies.begin(), frequencies.end(),
+            [](const auto& a, const auto& b) {
+              return a.second > b.second ||
+                     (a.second == b.second && a.first < b.first);
+            });
+
+  mkdir("result", 0755);
   std::ofstream output_file("result/freq.txt");
   if (!output_file) {
     std::cerr << "Error creating output file!" << std::endl;
@@ -55,8 +56,7 @@ void printFreq(BST<std::string>& tree) {
   }
 
   for (const auto& entry : frequencies) {
-    std::cout << entry.first << ": " << entry.second << std::endl;
-    output_file << entry.first << ": " << entry.second << std::endl;
+    output_file << entry.first << ": " << entry.second << "\n";
   }
 
   output_file.close();
