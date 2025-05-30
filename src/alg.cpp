@@ -1,11 +1,11 @@
 // Copyright 2021 NNTU-CS
+#include <sys/stat.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <algorithm>
 #include <string>
 #include <cctype>
-#include <sys/stat.h>
 #include "bst.h"
 
 void processCharacter(char ch, std::string& current_word,
