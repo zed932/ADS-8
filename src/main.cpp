@@ -2,5 +2,8 @@
 #include "bst.h"
 
 int main() {
-    return 0;
+  BST<std::string> word_tree;
+  makeTree(word_tree, "src/war_peace.txt");
+  printFreq(word_tree);
+  return 0;
 }
