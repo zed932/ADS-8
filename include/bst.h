@@ -75,7 +75,7 @@ class BST {
     }
     return 0;
   }
-  
+
   int computeDepth(Node* curr) const {
     if (curr == nullptr) return -1;
     int left_depth = computeDepth(curr->left);
